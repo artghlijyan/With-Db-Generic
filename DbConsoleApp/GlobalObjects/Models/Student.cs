@@ -1,17 +1,15 @@
 ﻿using DbFramework.Attributes;
 
-namespace DbFramework.Models
+namespace DbConsoleApp.GlobalObjects.Models
 {
     [TableName("Student")]
     public class Student
     {
-        private int id;
-
-        public int Id { get => this.id; set => id = value; }
+        public int Id { get; set; }
 
         public string FirstName { get; set; }
 
-        public string LastSurname { get; set; }
+        public string LastName { get; set; }
 
         public int Age { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿using DbFramework.Attributes;
 
-namespace DbFramework.Models
+namespace DbConsoleApp.GlobalObjects.Models
 {
     [TableName("University")]
     public class University

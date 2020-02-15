@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace DbFramework.DbConnector
+namespace DbFramework.DbHelper
 {
-    public class DbContext
+    class DbContext
     {
         private readonly string connectionString;
 
@@ -15,14 +15,14 @@ namespace DbFramework.DbConnector
 
         public IEnumerable<IDataReader> ExecuteSelect(string query)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                if (con != null && con.State == ConnectionState.Closed)
+                if (connection != null && connection.State == ConnectionState.Closed)
                 {
-                    con.Open();
+                    connection.Open();
                 }
 
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
