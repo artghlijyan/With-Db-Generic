@@ -44,13 +44,15 @@ namespace DbFramework.Repasitories.DbRepasitory
             {
                 Type type = typeof(TModel);
                 PropertyInfo[] propInfo = type.GetProperties();
+                int i = -1;
 
                 foreach (var prop in propInfo)
                 {
-                    int i = -1;
                     i++;
                     if (!reader.IsDBNull(i))
                         prop.SetValue(model, reader.GetValue(i));
+                    else
+                        prop.SetValue(model, null);
                 }
 
                 return model;

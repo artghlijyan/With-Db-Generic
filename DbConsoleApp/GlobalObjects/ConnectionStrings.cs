@@ -2,7 +2,10 @@
 {
     public static class ConnectionStrings
     {
-        public static readonly string SqlConnectionString =
+        public static readonly string HomeSqlConnectionString =
+            @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog = LocalDB; Integrated Security = True;";
+
+        public static readonly string MicSqlConnectionString =
             @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog = LocalDB; Integrated Security = True;";
     }
 }
