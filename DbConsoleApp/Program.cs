@@ -22,6 +22,15 @@ namespace DbConsoleApp
             //List<Student> stList = dbStRepo.ExecuteSelect(new Student()).ToList();
 
             DbRepasitory<University> dbUniRepo = new DbRepasitory<University>(ConnectionStrings.HomeSqlConnectionString);
+
+            University university = new University()
+            {
+                Name = "Politechnical University",
+                PhoneNumber = "+37410111111",
+            };
+
+            dbUniRepo.ExecuteInsert(university);
+
             List<University> uniList = dbUniRepo.ExecuteSelect(new University()).ToList();
 
             foreach (var item in uniList)

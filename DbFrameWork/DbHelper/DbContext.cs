@@ -35,5 +35,22 @@ namespace DbFramework.DbHelper
                 }
             }
         }
+
+        public void ExecuteInsert(string query)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                if (connection != null && connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    //TODO need to be added with parameter
+                }
+                
+            }
+        }
     }
 }

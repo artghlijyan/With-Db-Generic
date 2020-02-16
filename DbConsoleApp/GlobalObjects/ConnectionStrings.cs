@@ -6,6 +6,6 @@
             @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog = LocalDB; Integrated Security = True;";
 
         public static readonly string MicSqlConnectionString =
-            @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog = LocalDB; Integrated Security = True;";
+            @"";
     }
 }

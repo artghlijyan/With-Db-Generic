@@ -1,7 +1,6 @@
 ﻿using DbFramework.Attributes;
 using DbFramework.DbHelper;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
@@ -12,26 +11,37 @@ namespace DbFramework.Repasitories.DbRepasitory
         where TModel : class, new()
     {
         private DbContext dbContext;
-        private DataToModel toModel;
-        
+        private MappingHelper mappingHelper;
+
         public DbRepasitory(string connectionString)
         {
             dbContext = new DbContext(connectionString);
+            mappingHelper = new MappingHelper();
         }
 
         public IEnumerable<TModel> ExecuteSelect(TModel model)
         {
-            toModel = new DataToModel();
             IEnumerable<IDataReader> reader =
-                dbContext.ExecuteSelect(Query.SelectByQuery(Query.QueryType.Select, toModel.GetTableName(model)));
+                dbContext.ExecuteSelect(Query.SelectBuilder(mappingHelper.GetTableName(model)));
 
             foreach (var data in reader)
             {
-                yield return toModel.GetProperties(model, data);
+                yield return mappingHelper.InitializeModel(model, data);
             }
         }
 
-        private class DataToModel
+        public void ExecuteInsert(TModel model)
+        {
+            Dictionary<string, object> propertiesAndValues = mappingHelper.GetPropertiesAndValue(model);
+            dbContext.ExecuteInsert(Query.InsertBuilder(mappingHelper.GetTableName(model), propertiesAndValues));
+        }
+
+        public IEnumerable<TModel> ExecuteMultyInsert(List<TModel> t)
+        {
+            throw new NotImplementedException();
+        }
+
+        private class MappingHelper
         {
             public string GetTableName(object model)
             {
@@ -40,7 +50,7 @@ namespace DbFramework.Repasitories.DbRepasitory
                 return attribute == null ? type.Name : attribute.TableName;
             }
 
-            public TModel GetProperties(TModel model, IDataReader reader)
+            public TModel InitializeModel(TModel model, IDataReader reader)
             {
                 Type type = typeof(TModel);
                 PropertyInfo[] propInfo = type.GetProperties();
@@ -56,6 +66,24 @@ namespace DbFramework.Repasitories.DbRepasitory
                 }
 
                 return model;
+            }
+
+            public Dictionary<string, object> GetPropertiesAndValue(TModel model)
+            {
+                Dictionary<string, object> propertiesAndValues = new Dictionary<string, object>();
+
+                Type type = typeof(TModel);
+                PropertyInfo[] propInfo = type.GetProperties();
+
+                int i = -1;
+
+                foreach (var prop in propInfo)
+                {
+                    i++;
+                    propertiesAndValues.Add(prop.Name, prop.GetValue(model));
+                }
+
+                return propertiesAndValues;
             }
 
             //public static T ToModel<T>(this IDataReader dataReader) where T : class, new()
