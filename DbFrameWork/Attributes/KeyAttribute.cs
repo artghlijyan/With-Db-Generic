@@ -3,7 +3,7 @@
 namespace DbFramework.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class IgnoreAttribute : Attribute
+    public class KeyAttribute : Attribute
     {
     }
 }

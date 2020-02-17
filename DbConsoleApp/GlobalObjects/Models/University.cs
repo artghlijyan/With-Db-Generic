@@ -6,7 +6,7 @@ namespace DbConsoleApp.GlobalObjects.Models
     [TableName("University")]
     public class University
     {
-        [Ignore]
+        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }

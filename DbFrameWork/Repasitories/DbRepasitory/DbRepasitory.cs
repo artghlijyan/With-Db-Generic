@@ -82,7 +82,7 @@ namespace DbFramework.Repasitories.DbRepasitory
                 foreach (var prop in propInfo)
                 {
                     i++;
-                    if (!Attribute.IsDefined(prop, typeof(IgnoreAttribute)) && prop.GetValue(model) != null)
+                    if (!Attribute.IsDefined(prop, typeof(KeyAttribute)) && prop.GetValue(model) != null)
                     {
                         propertiesAndValues.Add(prop.Name, prop.GetValue(model));
                     }
