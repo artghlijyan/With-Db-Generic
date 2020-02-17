@@ -9,7 +9,7 @@ namespace DbFramework.DbHelper
         private static readonly string selectQuery = "SELECT * FROM [{0}]";
         private static readonly string insertQuery = "INSERT into {0} ({1}) VALUES ({2}); SELECT CAST(scope_identity() AS int)";
         private static readonly string updateQuery = "UPDATE {0} Set {1} = {2} WHERE Id = @{3}";
-        private static readonly string deleteQuery = "Delete FROM {0} WHERE {1}";
+        private static readonly string deleteQuery = "Delete FROM {0} WHERE Id = {1}";
 
         public static string SelectBuilder(string tableName)
         {
@@ -44,6 +44,11 @@ namespace DbFramework.DbHelper
                     Where(p => p.Key == "Id"));
             }
             return "";
+        }
+
+        public static string DeleteBuilder(string modelName, int modelId)
+        {
+            return string.Format(deleteQuery, modelName, modelId);
         }
     }
 }

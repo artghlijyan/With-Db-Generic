@@ -32,12 +32,13 @@ namespace DbFramework.Repasitories.DbRepasitory
             }
         }
 
-        public int ExecuteInsert(TModel model)
+        public void ExecuteInsert(TModel model)
         {
             IDictionary<string, object> propertiesAndValues = mapper.GetPropertiesAndValue(model);
-            return dbContext.ExecuteInsert
-                (Query.InsertBuilder(mapper.GetTableName(model), propertiesAndValues.Keys),
-                mapper.MapToSql(propertiesAndValues));
+            
+            dbContext.ExecuteInsert(
+                Query.InsertBuilder(mapper.GetTableName(model), propertiesAndValues.Keys),
+                mapper.MapToSqlParameteer(propertiesAndValues));
         }
 
         public int ExecuteUpdate(TModel model)
@@ -47,9 +48,15 @@ namespace DbFramework.Repasitories.DbRepasitory
             return 0;
         }
 
+        public bool ExecuteDelete(string tableName, int modelId)
+        {
+            return dbContext.ExecuteDelete(
+                Query.DeleteBuilder(tableName, modelId));
+        }
+
         private class Mapper
         {
-            public SqlParameter[] MapToSql(IDictionary<string, object> parameters)
+            public SqlParameter[] MapToSqlParameteer(IDictionary<string, object> parameters)
             {
                 SqlParameter sqlParameter;
                 SqlParameter[] sqlParameters = new SqlParameter[parameters.Count];
