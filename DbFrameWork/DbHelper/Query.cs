@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DbFramework.DbHelper
@@ -7,7 +8,7 @@ namespace DbFramework.DbHelper
     {
         private static readonly string selectQuery = "SELECT * FROM [{0}]";
         private static readonly string insertQuery = "INSERT into {0} ({1}) VALUES ({2}); SELECT CAST(scope_identity() AS int)";
-        private static readonly string updateQuery = "UPDATE {0} Set {1} = {2} WHERE Id = @{4}";
+        private static readonly string updateQuery = "UPDATE {0} Set {1} = {2} WHERE Id = @{3}";
         private static readonly string deleteQuery = "Delete FROM {0} WHERE {1}";
 
         public static string SelectBuilder(string tableName)
@@ -20,17 +21,29 @@ namespace DbFramework.DbHelper
             StringBuilder columns = new StringBuilder();
             StringBuilder values = new StringBuilder();
 
-            foreach (var parameter in parameterNames)
+            foreach (var parameterName in parameterNames)
             {
-                columns.Append('[').Append(parameter).Append(']').Append(",");
-                values.Append('@').Append(parameter).Append(",");
+                columns.Append('[').Append(parameterName).Append(']').Append(",");
+                values.Append('@').Append(parameterName).Append(",");
             }
 
-            string colum = columns.ToString().TrimEnd(',');
-            string value = values.ToString().TrimEnd(',');
+            return string.Format
+                (insertQuery, tableName, columns.ToString().TrimEnd(','), values.ToString().TrimEnd(','));
+        }
 
-            string query = string.Format(insertQuery, tableName, colum, value);
-            return query;
+        public static string UpdateBuilder(string tableName, IDictionary<string, object> parameters)
+        {
+            StringBuilder columns = new StringBuilder();
+            StringBuilder values = new StringBuilder();
+
+            string query = string.Format(updateQuery, tableName);
+
+            foreach (var parameter in parameters)
+            {
+                query = string.Format(query, parameter.Key, parameter.Value, parameters.
+                    Where(p => p.Key == "Id"));
+            }
+            return "";
         }
     }
 }

@@ -22,22 +22,47 @@ namespace DbConsoleApp
             //List<Student> stList = dbStRepo.ExecuteSelect(new Student()).ToList();
 
             DbRepasitory<University> dbUniRepo = new DbRepasitory<University>(ConnectionStrings.HomeSqlConnectionString);
-
             University university = new University()
             {
-                Name = "Politechnical University",
-                PhoneNumber = "+37410111111",
-                Address = "Mashtots str.",
+                Name = "YSU",
+                PhoneNumber = "+37410000000",
+                Address = "Abovyan str.",
             };
+            dbUniRepo.ExecuteUpdate(university);
 
-            dbUniRepo.ExecuteInsert(university);
+            //dbUniRepo.ExecuteInsert(university);
 
-            List<University> uniList = dbUniRepo.ExecuteSelect(new University()).ToList();
+            var uniList = dbUniRepo.ExecuteSelect(new University());
+            List<University> unilt = uniList.ToList();
 
             foreach (var item in uniList)
             {
+                //unilt.Add(item);////////////////////////// xi listi mech menak verjin objectna mnum?????????????
+                System.Console.WriteLine(item);
+
+            }
+
+            System.Console.WriteLine();
+            foreach (var item in unilt)
+            {
                 System.Console.WriteLine(item);
             }
+
+            //IEnumerable<int> enumerable = Count();
+            //List<int> asList = enumerable.ToList();
+
+            //foreach (var item in asList)
+            //{
+            //    System.Console.WriteLine(item);
+            //}
         }
+
+        //static IEnumerable<int> Count()
+        //{
+        //    for (int i = 0; i < 100; i++)
+        //    {
+        //        yield return i;
+        //    }
+        //}
     }
 }

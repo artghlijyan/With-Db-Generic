@@ -20,7 +20,7 @@ namespace DbConsoleApp.GlobalObjects.Models
 
         public override string ToString()
         {
-            return $"Id = {Id}, Name = {Name}, Phone Number = {PhoneNumber}, Address {Address}, Closed Date {DestroyDate}";
+            return $"Id: {Id}, Name: {Name}, Phone Number: {PhoneNumber}, Address: {Address}, Closed Date: {DestroyDate}";
         }
     }
 }

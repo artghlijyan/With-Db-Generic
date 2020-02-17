@@ -15,7 +15,7 @@ namespace DbConsoleApp.GlobalObjects.Models
         
         public override string ToString()
         {
-            return $"Id = {Id}, Firstname = {FirstName}, Lastname = {LastName}, Age = {Age}";
+            return $"Id: {Id}, Firstname: {FirstName}, Lastname: {LastName}, Age: {Age}";
         }
     }
 }

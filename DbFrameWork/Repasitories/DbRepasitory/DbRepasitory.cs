@@ -3,6 +3,7 @@ using DbFramework.DbHelper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 
@@ -24,27 +25,44 @@ namespace DbFramework.Repasitories.DbRepasitory
         {
             IEnumerable<IDataReader> reader =
                 dbContext.ExecuteSelect(Query.SelectBuilder(mapper.GetTableName(model)));
-
+            
             foreach (var data in reader)
             {
                 yield return mapper.InitializeModel(model, data);
             }
         }
 
-        public void ExecuteInsert(TModel model)
+        public int ExecuteInsert(TModel model)
         {
-            Dictionary<string, object> propertiesAndValues = mapper.GetPropertiesAndValue(model);
-            dbContext.ExecuteInsert
-                (Query.InsertBuilder(mapper.GetTableName(model), propertiesAndValues.Keys), propertiesAndValues);
+            IDictionary<string, object> propertiesAndValues = mapper.GetPropertiesAndValue(model);
+            return dbContext.ExecuteInsert
+                (Query.InsertBuilder(mapper.GetTableName(model), propertiesAndValues.Keys),
+                mapper.MapToSql(propertiesAndValues));
         }
 
-        public IEnumerable<TModel> ExecuteMultyInsert(List<TModel> t)
+        public int ExecuteUpdate(TModel model)
         {
-            throw new NotImplementedException();
+            IDictionary<string, object> propertiesAndValues = mapper.GetPropertiesAndValue(model);
+            Query.UpdateBuilder("ttt", propertiesAndValues);
+            return 0;
         }
 
         private class Mapper
         {
+            public SqlParameter[] MapToSql(IDictionary<string, object> parameters)
+            {
+                SqlParameter sqlParameter;
+                SqlParameter[] sqlParameters = new SqlParameter[parameters.Count];
+
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    sqlParameter = new SqlParameter(parameters.Keys.ElementAt(i), parameters.Values.ElementAt(i));
+                    sqlParameters[i] = sqlParameter;
+                }
+
+                return sqlParameters;
+            }
+
             public string GetTableName(object model)
             {
                 Type type = model.GetType();
@@ -70,7 +88,7 @@ namespace DbFramework.Repasitories.DbRepasitory
                 return model;
             }
 
-            public Dictionary<string, object> GetPropertiesAndValue(TModel model)
+            public IDictionary<string, object> GetPropertiesAndValue(TModel model)
             {
                 Dictionary<string, object> propertiesAndValues = new Dictionary<string, object>();
 
