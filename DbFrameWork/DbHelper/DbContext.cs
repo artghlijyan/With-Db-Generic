@@ -35,7 +35,7 @@ namespace DbFramework.DbHelper
             }
         }
 
-        public int ExecuteInsert(string query, SqlParameter[] sqlParameters)
+        public void ExecuteInsert(string query, SqlParameter[] sqlParameters)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -47,7 +47,23 @@ namespace DbFramework.DbHelper
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.Parameters.AddRange(sqlParameters);
-                    return (int)cmd.ExecuteScalar();
+                    cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public bool ExecuteDelete(string query)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                if (connection != null && connection.State == ConnectionState.Closed)
+                {
+                    connection.Open();
+                }
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    return cmd.ExecuteNonQuery() == 1;
                 }
             }
         }

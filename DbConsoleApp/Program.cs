@@ -22,15 +22,17 @@ namespace DbConsoleApp
             //List<Student> stList = dbStRepo.ExecuteSelect(new Student()).ToList();
 
             DbRepasitory<University> dbUniRepo = new DbRepasitory<University>(ConnectionStrings.HomeSqlConnectionString);
+            
             University university = new University()
             {
-                Name = "YSU",
-                PhoneNumber = "+37410000000",
-                Address = "Abovyan str.",
+                Id = 4,
+                Name = "YSEU",
+                PhoneNumber = "+37410444444",
+                Address = "Alek Manukyan str.",
             };
-            dbUniRepo.ExecuteUpdate(university);
 
             //dbUniRepo.ExecuteInsert(university);
+            //System.Console.WriteLine(dbUniRepo.ExecuteDelete("University", 4));
 
             var uniList = dbUniRepo.ExecuteSelect(new University());
             List<University> unilt = uniList.ToList();

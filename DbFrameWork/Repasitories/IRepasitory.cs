@@ -6,6 +6,8 @@ namespace DbFramework.Repasitories
     {
         IEnumerable<T> ExecuteSelect(T t);
 
-        int ExecuteInsert(T t);
+        void ExecuteInsert(T t);
+
+        bool ExecuteDelete(string tableName, int modelId);
     }
 }
