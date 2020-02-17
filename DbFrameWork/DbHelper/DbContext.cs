@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace DbFramework.DbHelper
 {
@@ -36,8 +36,17 @@ namespace DbFramework.DbHelper
             }
         }
 
-        public void ExecuteInsert(string query)
+        public void ExecuteInsert(string query, Dictionary<string, object> parameters)
         {
+            SqlParameter sqlParameter;
+            SqlParameter[] sqlParameters = new SqlParameter[parameters.Count];
+
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                sqlParameter = new SqlParameter(parameters.Keys.ElementAt(i), parameters.Values.ElementAt(i));
+                sqlParameters[i] = sqlParameter;
+            }
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 if (connection != null && connection.State == ConnectionState.Closed)
@@ -47,7 +56,8 @@ namespace DbFramework.DbHelper
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    //TODO need to be added with parameter
+                    cmd.Parameters.AddRange(sqlParameters);
+                    cmd.ExecuteNonQuery();
                 }
                 
             }

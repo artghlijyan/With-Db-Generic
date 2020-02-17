@@ -3,6 +3,7 @@ using DbFramework.DbHelper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 
 namespace DbFramework.Repasitories.DbRepasitory
@@ -11,29 +12,30 @@ namespace DbFramework.Repasitories.DbRepasitory
         where TModel : class, new()
     {
         private DbContext dbContext;
-        private MappingHelper mappingHelper;
+        private Mapper mapper;
 
         public DbRepasitory(string connectionString)
         {
             dbContext = new DbContext(connectionString);
-            mappingHelper = new MappingHelper();
+            mapper = new Mapper();
         }
 
         public IEnumerable<TModel> ExecuteSelect(TModel model)
         {
             IEnumerable<IDataReader> reader =
-                dbContext.ExecuteSelect(Query.SelectBuilder(mappingHelper.GetTableName(model)));
+                dbContext.ExecuteSelect(Query.SelectBuilder(mapper.GetTableName(model)));
 
             foreach (var data in reader)
             {
-                yield return mappingHelper.InitializeModel(model, data);
+                yield return mapper.InitializeModel(model, data);
             }
         }
 
         public void ExecuteInsert(TModel model)
         {
-            Dictionary<string, object> propertiesAndValues = mappingHelper.GetPropertiesAndValue(model);
-            dbContext.ExecuteInsert(Query.InsertBuilder(mappingHelper.GetTableName(model), propertiesAndValues));
+            Dictionary<string, object> propertiesAndValues = mapper.GetPropertiesAndValue(model);
+            dbContext.ExecuteInsert
+                (Query.InsertBuilder(mapper.GetTableName(model), propertiesAndValues.Keys), propertiesAndValues);
         }
 
         public IEnumerable<TModel> ExecuteMultyInsert(List<TModel> t)
@@ -41,7 +43,7 @@ namespace DbFramework.Repasitories.DbRepasitory
             throw new NotImplementedException();
         }
 
-        private class MappingHelper
+        private class Mapper
         {
             public string GetTableName(object model)
             {
@@ -80,7 +82,10 @@ namespace DbFramework.Repasitories.DbRepasitory
                 foreach (var prop in propInfo)
                 {
                     i++;
-                    propertiesAndValues.Add(prop.Name, prop.GetValue(model));
+                    if (!Attribute.IsDefined(prop, typeof(IgnoreAttribute)) && prop.GetValue(model) != null)
+                    {
+                        propertiesAndValues.Add(prop.Name, prop.GetValue(model));
+                    }
                 }
 
                 return propertiesAndValues;

@@ -8,7 +8,7 @@ namespace DbConsoleApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //Student student = new Student
             //{
@@ -27,6 +27,7 @@ namespace DbConsoleApp
             {
                 Name = "Politechnical University",
                 PhoneNumber = "+37410111111",
+                Address = "Mashtots str.",
             };
 
             dbUniRepo.ExecuteInsert(university);

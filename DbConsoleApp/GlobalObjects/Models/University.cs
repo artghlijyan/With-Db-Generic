@@ -6,9 +6,13 @@ namespace DbConsoleApp.GlobalObjects.Models
     [TableName("University")]
     public class University
     {
-        public int? Id { get; set; }
+        [Ignore]
+        public int Id { get; set; }
+
         public string Name { get; set; }
+        
         public string PhoneNumber { get; set; }
+        
         public string Address { get; set; }
 
         [Date]
