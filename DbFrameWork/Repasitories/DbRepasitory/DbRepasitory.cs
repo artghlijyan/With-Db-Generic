@@ -13,45 +13,46 @@ namespace DbFramework.Repasitories.DbRepasitory
         where TModel : class, new()
     {
         private DbContext dbContext;
-        private Mapper mapper;
+        private Mapper _mapper;
+        private TModel _model;
 
         public DbRepasitory(string connectionString)
         {
             dbContext = new DbContext(connectionString);
-            mapper = new Mapper();
+            _mapper = new Mapper();
         }
 
-        public IEnumerable<TModel> ExecuteSelect(TModel model)
+        public IEnumerable<TModel> ExecuteSelect()
         {
             IEnumerable<IDataReader> reader =
-                dbContext.ExecuteSelect(Query.SelectBuilder(mapper.GetTableName(model)));
+                dbContext.ExecuteSelect(Query.SelectBuilder(_mapper.GetTableName(_model = new TModel())));
             
             foreach (var data in reader)
             {
-                yield return mapper.InitializeModel(model, data);
+                yield return _mapper.InitializeModel(_model, data);
             }
         }
 
         public void ExecuteInsert(TModel model)
         {
-            IDictionary<string, object> propertiesAndValues = mapper.GetPropertiesAndValue(model);
+            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValue(model);
             
             dbContext.ExecuteInsert(
-                Query.InsertBuilder(mapper.GetTableName(model), propertiesAndValues.Keys),
-                mapper.MapToSqlParameteer(propertiesAndValues));
+                Query.InsertBuilder(_mapper.GetTableName(model), propertiesAndValues.Keys),
+                _mapper.MapToSqlParameteer(propertiesAndValues));
         }
 
         public int ExecuteUpdate(TModel model)
         {
-            IDictionary<string, object> propertiesAndValues = mapper.GetPropertiesAndValue(model);
+            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValue(model);
             Query.UpdateBuilder("ttt", propertiesAndValues);
             return 0;
         }
 
-        public bool ExecuteDelete(string tableName, int modelId)
+        public bool ExecuteDelete(int id)
         {
             return dbContext.ExecuteDelete(
-                Query.DeleteBuilder(tableName, modelId));
+                Query.DeleteBuilder(_mapper.GetTableName(_model = new TModel()), id));
         }
 
         private class Mapper

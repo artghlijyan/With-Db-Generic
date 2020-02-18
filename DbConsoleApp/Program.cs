@@ -34,7 +34,7 @@ namespace DbConsoleApp
             //dbUniRepo.ExecuteInsert(university);
             //System.Console.WriteLine(dbUniRepo.ExecuteDelete("University", 4));
 
-            var uniList = dbUniRepo.ExecuteSelect(new University());
+            var uniList = dbUniRepo.ExecuteSelect();
             List<University> unilt = uniList.ToList();
 
             foreach (var item in uniList)
