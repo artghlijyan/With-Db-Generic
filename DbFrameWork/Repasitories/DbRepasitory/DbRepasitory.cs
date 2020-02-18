@@ -12,52 +12,53 @@ namespace DbFramework.Repasitories.DbRepasitory
     public class DbRepasitory<TModel> : IRepasitory<TModel>
         where TModel : class, new()
     {
-        private DbContext dbContext;
-        private Mapper _mapper;
-        private TModel _model;
+        private readonly DbContext _dbContext;
+        private readonly Mapper _mapper;
+        private readonly string _tableName;
 
         public DbRepasitory(string connectionString)
         {
-            dbContext = new DbContext(connectionString);
+            _dbContext = new DbContext(connectionString);
             _mapper = new Mapper();
+            _tableName = _mapper.GetTableName();
         }
 
         public IEnumerable<TModel> ExecuteSelect()
         {
             IEnumerable<IDataReader> reader =
-                dbContext.ExecuteSelect(Query.SelectBuilder(_mapper.GetTableName(_model = new TModel())));
-            
+                _dbContext.ExecuteSelect(Query.SelectBuilder(_tableName));
+
             foreach (var data in reader)
             {
-                yield return _mapper.InitializeModel(_model, data);
+                yield return _mapper.InitializeModel(data);
             }
         }
 
         public void ExecuteInsert(TModel model)
         {
-            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValue(model);
-            
-            dbContext.ExecuteInsert(
-                Query.InsertBuilder(_mapper.GetTableName(model), propertiesAndValues.Keys),
-                _mapper.MapToSqlParameteer(propertiesAndValues));
+            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValues(model);
+
+            _dbContext.ExecuteInsert(
+                Query.InsertBuilder(_tableName, propertiesAndValues.Keys),
+                _mapper.MapToSqlParameter(propertiesAndValues));
         }
 
         public int ExecuteUpdate(TModel model)
         {
-            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValue(model);
-            Query.UpdateBuilder("ttt", propertiesAndValues);
+            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValues(model);
+            Query.UpdateBuilder(_tableName, propertiesAndValues);
             return 0;
         }
 
         public bool ExecuteDelete(int id)
         {
-            return dbContext.ExecuteDelete(
-                Query.DeleteBuilder(_mapper.GetTableName(_model = new TModel()), id));
+            return _dbContext.ExecuteDelete(
+                Query.DeleteBuilder(_tableName, id));
         }
 
         private class Mapper
         {
-            public SqlParameter[] MapToSqlParameteer(IDictionary<string, object> parameters)
+            public SqlParameter[] MapToSqlParameter(IDictionary<string, object> parameters)
             {
                 SqlParameter sqlParameter;
                 SqlParameter[] sqlParameters = new SqlParameter[parameters.Count];
@@ -71,17 +72,19 @@ namespace DbFramework.Repasitories.DbRepasitory
                 return sqlParameters;
             }
 
-            public string GetTableName(object model)
+            public string GetTableName()
             {
-                Type type = model.GetType();
+                Type type = typeof(TModel);
                 TableNameAttribute attribute = type.GetCustomAttribute<TableNameAttribute>();
                 return attribute == null ? type.Name : attribute.TableName;
             }
 
-            public TModel InitializeModel(TModel model, IDataReader reader)
+            public TModel InitializeModel(IDataReader reader)
             {
                 Type type = typeof(TModel);
                 PropertyInfo[] propInfo = type.GetProperties();
+                TModel model = new TModel();
+
                 int i = -1;
 
                 foreach (var prop in propInfo)
@@ -96,7 +99,7 @@ namespace DbFramework.Repasitories.DbRepasitory
                 return model;
             }
 
-            public IDictionary<string, object> GetPropertiesAndValue(TModel model)
+            public IDictionary<string, object> GetPropertiesAndValues(TModel model)
             {
                 Dictionary<string, object> propertiesAndValues = new Dictionary<string, object>();
 
@@ -116,45 +119,46 @@ namespace DbFramework.Repasitories.DbRepasitory
 
                 return propertiesAndValues;
             }
-
-            //public static T ToModel<T>(this IDataReader dataReader) where T : class, new()
-            //{
-            //    Type type = typeof(T);
-
-            //    var members = type
-            //        .GetProperties()
-            //        .Where(p => p.GetCustomAttribute<IgnoreAttribute>() == null)
-            //        .ToList();
-
-            //    var source = new T();
-
-            //    for (int i = 0; i < members.Count; i++)
-            //    {
-            //        if (members[i].GetCustomAttribute<DateAttribute>() != null)
-            //        {
-            //            if (DateTime.TryParse(dataReader.GetValue(i).ToString(), out DateTime date))
-            //            {
-            //                members[i].SetValue(source, date);
-            //            }
-
-            //        }
-            //        else
-            //        {
-
-            //            if (!dataReader.IsDBNull(i))
-            //            {
-            //                members[i].SetValue(source, dataReader.GetValue(i));
-            //            }
-            //            else
-            //            {
-            //                members[i].SetValue(source, null);
-            //            }
-            //        }
-
-            //    }
-
-            //    return source;
-            //}
         }
+
+        //public static T ToModel<T>(this IDataReader dataReader) where T : class, new()
+        //{
+        //    Type type = typeof(T);
+
+        //    var members = type
+        //        .GetProperties()
+        //        .Where(p => p.GetCustomAttribute<IgnoreAttribute>() == null)
+        //        .ToList();
+
+        //    var source = new T();
+
+        //    for (int i = 0; i < members.Count; i++)
+        //    {
+        //        if (members[i].GetCustomAttribute<DateAttribute>() != null)
+        //        {
+        //            if (DateTime.TryParse(dataReader.GetValue(i).ToString(), out DateTime date))
+        //            {
+        //                members[i].SetValue(source, date);
+        //            }
+
+        //        }
+        //        else
+        //        {
+
+        //            if (!dataReader.IsDBNull(i))
+        //            {
+        //                members[i].SetValue(source, dataReader.GetValue(i));
+        //            }
+        //            else
+        //            {
+        //                members[i].SetValue(source, null);
+        //            }
+        //        }
+
+        //    }
+
+        //    return source;
+        //}
+
     }
 }

@@ -25,46 +25,21 @@ namespace DbConsoleApp
             
             University university = new University()
             {
-                Id = 4,
                 Name = "YSEU",
                 PhoneNumber = "+37410444444",
                 Address = "Alek Manukyan str.",
             };
 
             //dbUniRepo.ExecuteInsert(university);
-            //System.Console.WriteLine(dbUniRepo.ExecuteDelete("University", 4));
+            //System.Console.WriteLine(dbUniRepo.ExecuteDelete(1000));
 
-            var uniList = dbUniRepo.ExecuteSelect();
-            List<University> unilt = uniList.ToList();
+            var uniList = dbUniRepo.ExecuteSelect().ToList();
 
             foreach (var item in uniList)
             {
-                //unilt.Add(item);////////////////////////// xi listi mech menak verjin objectna mnum?????????????
                 System.Console.WriteLine(item);
 
             }
-
-            System.Console.WriteLine();
-            foreach (var item in unilt)
-            {
-                System.Console.WriteLine(item);
-            }
-
-            //IEnumerable<int> enumerable = Count();
-            //List<int> asList = enumerable.ToList();
-
-            //foreach (var item in asList)
-            //{
-            //    System.Console.WriteLine(item);
-            //}
         }
-
-        //static IEnumerable<int> Count()
-        //{
-        //    for (int i = 0; i < 100; i++)
-        //    {
-        //        yield return i;
-        //    }
-        //}
     }
 }
