@@ -8,6 +8,8 @@ namespace DbFramework.Repasitories
 
         void ExecuteInsert(T t);
 
+        int ExecuteUpdate(T t);
+
         bool ExecuteDelete(int id);
     }
 }

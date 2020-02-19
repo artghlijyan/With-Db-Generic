@@ -37,18 +37,49 @@ namespace DbFramework.DbHelper
 
         public void ExecuteInsert(string query, SqlParameter[] sqlParameters)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                if (connection != null && connection.State == ConnectionState.Closed)
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
-                }
+                    if (connection != null && connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
 
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddRange(sqlParameters);
-                    cmd.ExecuteScalar();
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddRange(sqlParameters);
+                        cmd.ExecuteScalar();
+                    }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
+            }
+        }
+
+        public int ExecuteUpdate(string query, SqlParameter[] sqlParameters)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    if (connection != null && connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddRange(sqlParameters);
+                        return (int)cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
             }
         }
 

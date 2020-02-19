@@ -1,7 +1,6 @@
 ﻿using DbConsoleApp.GlobalObjects;
 using DbConsoleApp.GlobalObjects.Models;
 using DbFramework.Repasitories.DbRepasitory;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace DbConsoleApp
@@ -22,7 +21,7 @@ namespace DbConsoleApp
             //List<Student> stList = dbStRepo.ExecuteSelect(new Student()).ToList();
 
             DbRepasitory<University> dbUniRepo = new DbRepasitory<University>(ConnectionStrings.HomeSqlConnectionString);
-            
+
             University university = new University()
             {
                 Name = "YSEU",
@@ -30,6 +29,7 @@ namespace DbConsoleApp
                 Address = "Alek Manukyan str.",
             };
 
+            //dbUniRepo.ExecuteUpdate(university);
             //dbUniRepo.ExecuteInsert(university);
             //System.Console.WriteLine(dbUniRepo.ExecuteDelete(1000));
 

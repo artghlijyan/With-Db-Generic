@@ -12,14 +12,14 @@ namespace DbFramework.Repasitories.DbRepasitory
     public class DbRepasitory<TModel> : IRepasitory<TModel>
         where TModel : class, new()
     {
-        private readonly DbContext _dbContext;
         private readonly Mapper _mapper;
+        private readonly DbContext _dbContext;
         private readonly string _tableName;
 
         public DbRepasitory(string connectionString)
         {
-            _dbContext = new DbContext(connectionString);
             _mapper = new Mapper();
+            _dbContext = new DbContext(connectionString);
             _tableName = _mapper.GetTableName();
         }
 
@@ -45,8 +45,10 @@ namespace DbFramework.Repasitories.DbRepasitory
 
         public int ExecuteUpdate(TModel model)
         {
-            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValues(model);
-            Query.UpdateBuilder(_tableName, propertiesAndValues);
+            IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValues(model, true);
+            _dbContext.ExecuteUpdate(
+                Query.UpdateBuilder(_tableName, propertiesAndValues.Keys),
+                _mapper.MapToSqlParameter(propertiesAndValues));
             return 0;
         }
 
@@ -56,6 +58,7 @@ namespace DbFramework.Repasitories.DbRepasitory
                 Query.DeleteBuilder(_tableName, id));
         }
 
+        #region Nested Class Mapper
         private class Mapper
         {
             public SqlParameter[] MapToSqlParameter(IDictionary<string, object> parameters)
@@ -99,7 +102,7 @@ namespace DbFramework.Repasitories.DbRepasitory
                 return model;
             }
 
-            public IDictionary<string, object> GetPropertiesAndValues(TModel model)
+            public IDictionary<string, object> GetPropertiesAndValues(TModel model, bool getId = false)
             {
                 Dictionary<string, object> propertiesAndValues = new Dictionary<string, object>();
 
@@ -111,15 +114,31 @@ namespace DbFramework.Repasitories.DbRepasitory
                 foreach (var prop in propInfo)
                 {
                     i++;
-                    if (!Attribute.IsDefined(prop, typeof(KeyAttribute)) && prop.GetValue(model) != null)
+                    switch (getId)
                     {
-                        propertiesAndValues.Add(prop.Name, prop.GetValue(model));
+                        case true:
+                            {
+                                if (prop.GetValue(model) != null)
+                                {
+                                    propertiesAndValues.Add(prop.Name, prop.GetValue(model));
+                                }
+                                break;
+                            }
+                        default:
+                            {
+                                if (!Attribute.IsDefined(prop, typeof(KeyAttribute)) && prop.GetValue(model) != null)
+                                {
+                                    propertiesAndValues.Add(prop.Name, prop.GetValue(model));
+                                }
+                                break;
+                            }
                     }
                 }
 
                 return propertiesAndValues;
             }
         }
+        #endregion
 
         //public static T ToModel<T>(this IDataReader dataReader) where T : class, new()
         //{
