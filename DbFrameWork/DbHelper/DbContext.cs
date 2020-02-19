@@ -85,17 +85,24 @@ namespace DbFramework.DbHelper
 
         public bool ExecuteDelete(string query)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                if (connection != null && connection.State == ConnectionState.Closed)
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    connection.Open();
-                }
+                    if (connection != null && connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
 
-                using (SqlCommand cmd = new SqlCommand(query, connection))
-                {
-                    return cmd.ExecuteNonQuery() == 1;
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        return cmd.ExecuteNonQuery() == 1;
+                    }
                 }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception(ex.Message);
             }
         }
     }
