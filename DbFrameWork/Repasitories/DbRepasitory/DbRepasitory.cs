@@ -46,10 +46,10 @@ namespace DbFramework.Repasitories.DbRepasitory
         public int ExecuteUpdate(TModel model)
         {
             IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValues(model, true);
-            _dbContext.ExecuteUpdate(
+            
+            return _dbContext.ExecuteUpdate(
                 Query.UpdateBuilder(_tableName, propertiesAndValues.Keys),
                 _mapper.MapToSqlParameter(propertiesAndValues));
-            return 0;
         }
 
         public bool ExecuteDelete(int id)
@@ -104,7 +104,7 @@ namespace DbFramework.Repasitories.DbRepasitory
 
             public IDictionary<string, object> GetPropertiesAndValues(TModel model, bool getId = false)
             {
-                Dictionary<string, object> propertiesAndValues = new Dictionary<string, object>();
+                IDictionary<string, object> propertiesAndValues = new Dictionary<string, object>();
 
                 Type type = typeof(TModel);
                 PropertyInfo[] propInfo = type.GetProperties();
@@ -138,6 +138,8 @@ namespace DbFramework.Repasitories.DbRepasitory
                 return propertiesAndValues;
             }
         }
+
+
         #endregion
 
         //public static T ToModel<T>(this IDataReader dataReader) where T : class, new()
