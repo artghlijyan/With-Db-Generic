@@ -1,7 +1,7 @@
 ﻿using DbFramework.Attributes;
 using System;
 
-namespace DbConsoleApp.GlobalObjects.Models
+namespace Mic.Lesson.DbRepasitory.Models
 {
     [TableName("University")]
     public class University

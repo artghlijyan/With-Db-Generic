@@ -1,6 +1,6 @@
 ﻿using DbConsoleApp.GlobalObjects;
-using DbConsoleApp.GlobalObjects.Models;
-using DbFramework.Repasitories.DbRepasitory;
+using Mic.Lesson.DbRepasitory.Models;
+using Mic.Lesson.DbRepasitory.Repasitories.Impl;
 using System.Linq;
 
 namespace DbConsoleApp
@@ -20,7 +20,7 @@ namespace DbConsoleApp
             //DbRepasitory<Student> dbStRepo = new DbRepasitory<Student>(ConnectionStrings.SqlConnectionString);
             //List<Student> stList = dbStRepo.ExecuteSelect(new Student()).ToList();
 
-            DbRepasitory<University> dbUniRepo = new DbRepasitory<University>(ConnectionStrings.HomeSqlConnectionString);
+            DbRepasitory<University> dbUniRepo = new DbRepasitory<University>(ConnectionStrings.MicSqlConnectionString);
 
             University university = new University()
             {
@@ -30,7 +30,7 @@ namespace DbConsoleApp
             };
 
             //dbUniRepo.ExecuteUpdate(university);
-            //dbUniRepo.ExecuteInsert(university);
+            //dbUniRepo.Add(university);
             //System.Console.WriteLine(dbUniRepo.ExecuteDelete(1000));
 
             var uniList = dbUniRepo.SelectAll().ToList();
@@ -38,7 +38,6 @@ namespace DbConsoleApp
             foreach (var item in uniList)
             {
                 System.Console.WriteLine(item);
-
             }
         }
     }

@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace DbFramework.DbHelper
 {
-    class DbContext
+    public class DbContext
     {
         private readonly string connectionString;
 
@@ -13,7 +13,7 @@ namespace DbFramework.DbHelper
             this.connectionString = connectionString;
         }
 
-        public IEnumerable<IDataReader> Select(string query)
+        public IEnumerable<IDataReader> AsReadable(string query)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

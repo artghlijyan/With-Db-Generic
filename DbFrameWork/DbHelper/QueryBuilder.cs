@@ -4,14 +4,14 @@ using System.Text;
 
 namespace DbFramework.DbHelper
 {
-    static class QueryBuilder
+    public static class QueryBuilder
     {
         private static readonly string selectQuery = "SELECT * FROM [{0}]";
         private static readonly string insertQuery = "INSERT into {0} ({1}) VALUES ({2}); SELECT CAST(scope_identity() AS int)";
         private static readonly string updateQuery = "UPDATE {0} Set {1} WHERE Id = @{2}";
         private static readonly string deleteQuery = "Delete FROM {0} WHERE Id = {1}";
 
-        public static string Select(string tableName)
+        public static string BuildSelectQuery(string tableName)
         {
             return string.Format(selectQuery, tableName);
         }
