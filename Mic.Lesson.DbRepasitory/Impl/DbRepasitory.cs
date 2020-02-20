@@ -31,20 +31,16 @@ namespace Mic.Lesson.DbRepasitory.Repasitories.Impl
 
         public void Add(TModel model)
         {
-            IDictionary<string, object> propertiesAndValues = Mapper.GetPropertiesAndValues(model);
-
-            _dbContext.Insert(
-                QueryBuilder.Insert(_tableName, propertiesAndValues.Keys),
-                Mapper.MapToSqlParameter(propertiesAndValues));
+            var properties = Mapper.GetPropertiesAndValues(model);
+            string query = QueryBuilder.BuildInsertQuery(_tableName, properties.Keys);
+            _dbContext.Insert(query, Mapper.MapToSqlParameter(properties));
         }
 
         public int Update(TModel model)
         {
             IDictionary<string, object> propertiesAndValues = Mapper.GetPropertiesAndValues(model, true);
-
-            return _dbContext.Update(
-                QueryBuilder.Update(_tableName, propertiesAndValues.Keys),
-                Mapper.MapToSqlParameter(propertiesAndValues));
+            string query = QueryBuilder.BuildUpdateQuery(_tableName, propertiesAndValues.Keys);
+            return _dbContext.Update(query, Mapper.MapToSqlParameter(propertiesAndValues));
         }
 
         public bool Delete(int id)

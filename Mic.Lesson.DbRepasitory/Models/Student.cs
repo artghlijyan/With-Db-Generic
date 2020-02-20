@@ -13,7 +13,7 @@ namespace Mic.Lesson.DbRepasitory.Models
         public string LastName { get; set; }
 
         public int? Age { get; set; }
-        
+
         public override string ToString()
         {
             return $"Id: {Id}, Firstname: {FirstName}, Lastname: {LastName}, Age: {Age}";

@@ -16,7 +16,7 @@ namespace DbFramework.DbHelper
             return string.Format(selectQuery, tableName);
         }
 
-        public static string Insert(string tableName, IEnumerable<string> parameterNames)
+        public static string BuildInsertQuery(string tableName, IEnumerable<string> parameterNames)
         {
             StringBuilder columns = new StringBuilder();
             StringBuilder values = new StringBuilder();
@@ -31,7 +31,7 @@ namespace DbFramework.DbHelper
                 insertQuery, tableName, columns.ToString().TrimEnd(','), values.ToString().TrimEnd(','));
         }
 
-        public static string Update(string tableName, IEnumerable<string> parameterNames)
+        public static string BuildUpdateQuery(string tableName, IEnumerable<string> parameterNames)
         {
             StringBuilder columnValue = new StringBuilder();
 

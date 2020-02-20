@@ -30,7 +30,7 @@ namespace DbConsoleApp
             };
 
             //dbUniRepo.ExecuteUpdate(university);
-            //dbUniRepo.Add(university);
+            dbUniRepo.Add(university);
             //System.Console.WriteLine(dbUniRepo.ExecuteDelete(1000));
 
             var uniList = dbUniRepo.SelectAll().ToList();
