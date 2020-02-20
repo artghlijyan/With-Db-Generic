@@ -4,12 +4,12 @@ namespace DbFramework.Repasitories
 {
     interface IRepasitory<T>
     {
-        IEnumerable<T> ExecuteSelect();
+        IEnumerable<T> SelectAll();
 
-        void ExecuteInsert(T t);
+        void Add(T t);
 
-        int ExecuteUpdate(T t);
+        int Update(T t);
 
-        bool ExecuteDelete(int id);
+        bool Delete(int id);
     }
 }

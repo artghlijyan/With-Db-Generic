@@ -13,7 +13,7 @@ namespace DbFramework.DbHelper
             this.connectionString = connectionString;
         }
 
-        public IEnumerable<IDataReader> ExecuteSelect(string query)
+        public IEnumerable<IDataReader> Select(string query)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -35,7 +35,7 @@ namespace DbFramework.DbHelper
             }
         }
 
-        public void ExecuteInsert(string query, SqlParameter[] sqlParameters)
+        public void Insert(string query, SqlParameter[] sqlParameters)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace DbFramework.DbHelper
             }
         }
 
-        public int ExecuteUpdate(string query, SqlParameter[] sqlParameters)
+        public int Update(string query, SqlParameter[] sqlParameters)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace DbFramework.DbHelper
             }
         }
 
-        public bool ExecuteDelete(string query)
+        public bool Delete(string query)
         {
             try
             {

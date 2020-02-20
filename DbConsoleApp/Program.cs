@@ -33,7 +33,7 @@ namespace DbConsoleApp
             //dbUniRepo.ExecuteInsert(university);
             //System.Console.WriteLine(dbUniRepo.ExecuteDelete(1000));
 
-            var uniList = dbUniRepo.ExecuteSelect().ToList();
+            var uniList = dbUniRepo.SelectAll().ToList();
 
             foreach (var item in uniList)
             {

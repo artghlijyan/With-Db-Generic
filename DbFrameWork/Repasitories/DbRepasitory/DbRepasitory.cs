@@ -23,10 +23,10 @@ namespace DbFramework.Repasitories.DbRepasitory
             _tableName = _mapper.GetTableName();
         }
 
-        public IEnumerable<TModel> ExecuteSelect()
+        public IEnumerable<TModel> SelectAll()
         {
             IEnumerable<IDataReader> reader =
-                _dbContext.ExecuteSelect(Query.SelectBuilder(_tableName));
+                _dbContext.Select(QueryBuilder.Select(_tableName));
 
             foreach (var data in reader)
             {
@@ -34,28 +34,28 @@ namespace DbFramework.Repasitories.DbRepasitory
             }
         }
 
-        public void ExecuteInsert(TModel model)
+        public void Add(TModel model)
         {
             IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValues(model);
 
-            _dbContext.ExecuteInsert(
-                Query.InsertBuilder(_tableName, propertiesAndValues.Keys),
+            _dbContext.Insert(
+                QueryBuilder.Insert(_tableName, propertiesAndValues.Keys),
                 _mapper.MapToSqlParameter(propertiesAndValues));
         }
 
-        public int ExecuteUpdate(TModel model)
+        public int Update(TModel model)
         {
             IDictionary<string, object> propertiesAndValues = _mapper.GetPropertiesAndValues(model, true);
             
-            return _dbContext.ExecuteUpdate(
-                Query.UpdateBuilder(_tableName, propertiesAndValues.Keys),
+            return _dbContext.Update(
+                QueryBuilder.Update(_tableName, propertiesAndValues.Keys),
                 _mapper.MapToSqlParameter(propertiesAndValues));
         }
 
-        public bool ExecuteDelete(int id)
+        public bool Delete(int id)
         {
-            return _dbContext.ExecuteDelete(
-                Query.DeleteBuilder(_tableName, id));
+            return _dbContext.Delete(
+                QueryBuilder.Delete(_tableName, id));
         }
 
         #region Nested Class Mapper
