@@ -5,9 +5,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace Mic.Lesson.DbRepasitory
+namespace DbRepasitory
 {
     static class Mapper
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mic.Lesson.DbRepasitory
+namespace DbRepasitory
 {
     interface IRepasitory<T>
     {

@@ -1,9 +1,7 @@
 ﻿using DbFramework.Attributes;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
-namespace Mic.Lesson.DbRepasitory.Models
+namespace DbRepasitory.Models
 {
     [TableName("University")]
     public class University

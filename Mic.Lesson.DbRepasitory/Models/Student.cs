@@ -1,6 +1,6 @@
 ﻿using DbFramework.Attributes;
 
-namespace Mic.Lesson.DbRepasitory.Models
+namespace DbRepasitory.Models
 {
     [TableName("Student")]
     public class Student

@@ -1,13 +1,8 @@
-﻿using DbFramework.Attributes;
-using DbFramework.DbHelper;
-using System;
+﻿using DbFramework.DbHelper;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 
-namespace Mic.Lesson.DbRepasitory.Repasitories.Impl
+namespace DbRepasitory.Repasitories.Impl
 {
     public class DbRepasitory<TModel> : IRepasitory<TModel>
         where TModel : class, new()
@@ -23,30 +18,28 @@ namespace Mic.Lesson.DbRepasitory.Repasitories.Impl
 
         public IEnumerable<TModel> SelectAll()
         {
-            string query = QueryBuilder.BuildSelectQuery(_tableName);
             return _dbContext
-                      .AsReadable(query)
+                      .AsReadable(QueryBuilder.BuildSelectQuery(_tableName))
                       .Select(r => r.ToModel<TModel>());
         }
 
         public void Add(TModel model)
         {
-            var properties = Mapper.GetPropertiesAndValues(model);
-            string query = QueryBuilder.BuildInsertQuery(_tableName, properties.Keys);
-            _dbContext.Insert(query, Mapper.MapToSqlParameter(properties));
+            IDictionary<string, object> propAndVal = Mapper.GetPropertiesAndValues(model);
+            _dbContext.Insert(QueryBuilder.BuildInsertQuery(_tableName, propAndVal.Keys)
+                , Mapper.MapToSqlParameter(propAndVal));
         }
 
         public int Update(TModel model)
         {
             IDictionary<string, object> propertiesAndValues = Mapper.GetPropertiesAndValues(model, true);
-            string query = QueryBuilder.BuildUpdateQuery(_tableName, propertiesAndValues.Keys);
-            return _dbContext.Update(query, Mapper.MapToSqlParameter(propertiesAndValues));
+            return _dbContext.Update(QueryBuilder.BuildUpdateQuery(_tableName, propertiesAndValues.Keys)
+                , Mapper.MapToSqlParameter(propertiesAndValues));
         }
 
         public bool Delete(int id)
         {
-            return _dbContext.Delete(
-                QueryBuilder.Delete(_tableName, id));
+            return _dbContext.Delete(QueryBuilder.Delete(_tableName, id));
         }
     }
 }

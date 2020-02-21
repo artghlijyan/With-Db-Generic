@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbConsoleApp", "DbConsoleAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbFramework", "DbFrameWork\DbFramework.csproj", "{35E07BD5-DA7B-4C6E-ACF5-E43D0E81F755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mic.Lesson.DbRepasitory", "Mic.Lesson.DbRepasitory\Mic.Lesson.DbRepasitory.csproj", "{E01153CB-D8DC-4D1D-B22E-E33A045A2D4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbRepasitory", "Mic.Lesson.DbRepasitory\DbRepasitory.csproj", "{E01153CB-D8DC-4D1D-B22E-E33A045A2D4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

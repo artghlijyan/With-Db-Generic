@@ -1,6 +1,6 @@
 ﻿using DbConsoleApp.GlobalObjects;
-using Mic.Lesson.DbRepasitory.Models;
-using Mic.Lesson.DbRepasitory.Repasitories.Impl;
+using DbRepasitory.Models;
+using DbRepasitory.Repasitories.Impl;
 using System.Linq;
 
 namespace DbConsoleApp
