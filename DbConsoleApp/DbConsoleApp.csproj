@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DbRepasitory\DbRepasitory.csproj" />
     <ProjectReference Include="..\Mic.Lesson.DbRepasitory\DbRepasitory.csproj" />
   </ItemGroup>
 
