@@ -26,14 +26,18 @@ namespace DbRepasitory.Repasitories.Impl
         public void Add(TModel model)
         {
             IDictionary<string, object> propAndVal = Mapper.GetPropertiesAndValues(model);
-            _dbContext.Insert(QueryBuilder.BuildInsertQuery(_tableName, propAndVal.Keys)
+
+            _dbContext.Insert(QueryBuilder
+                .BuildInsertQuery(_tableName, propAndVal.Keys)
                 , Mapper.MapToSqlParameter(propAndVal));
         }
 
         public int Update(TModel model)
         {
             IDictionary<string, object> propertiesAndValues = Mapper.GetPropertiesAndValues(model, true);
-            return _dbContext.Update(QueryBuilder.BuildUpdateQuery(_tableName, propertiesAndValues.Keys)
+
+            return _dbContext.Update(QueryBuilder
+                .BuildUpdateQuery(_tableName, propertiesAndValues.Keys)
                 , Mapper.MapToSqlParameter(propertiesAndValues));
         }
 
